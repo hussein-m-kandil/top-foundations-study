@@ -1,0 +1,67 @@
+body {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    font-size: 100%;
+    line-height: 1.5rem;
+    padding: 1rem;
+}
+
+h1 {
+    text-align: center;
+    line-height: 2rem;
+}
+
+img {
+    width: 300px;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+
+body>a {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+li {
+    margin: 0.5rem auto;
+}
+
+ul {
+    padding: inherit;
+    list-style: disc;
+}
+
+ol {
+    list-style: decimal-leading-zero;
+}
+
+ol>li::marker {
+    font-weight: bold;
+}
+
+#recipes {
+    width: max-content;
+    margin: auto;
+    list-style-position: inside;
+}
+
+#recipes img {
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 320px) {
+
+    body {
+        padding: 0;
+    }
+
+    img {
+        width: 80vw;
+    }
+
+    #recipes {
+        width: 100vw;
+        margin: 0;
+    }
+}
