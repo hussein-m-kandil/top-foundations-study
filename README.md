@@ -4,4 +4,4 @@ A single monorepo for projects that i made while studying the [Foundations Cours
 
 ### Projects
 
-1. [Odin Recipes](https://hussein-m-kandil.github.io/top-foundations-study/odin-recipes/)
+1. [Odin Recipes](https://hussein-m-kandil.github.io/top-foundations-study/odin-recipes/index.html)
