@@ -58,12 +58,14 @@ function game() {
   let computerChoice;
   let userChoice;
   let roundResult;
+  // Play 5 rounds
   for (let i = 0; i < 5; i++) {
     computerChoice = getComputerChoice();
     userChoice = getUserChoice();
     roundResult = playRound(computerChoice, userChoice);
     console.log(roundResult);
   }
+  // Log final result
   if (userScore === computerScore) {
     console.log("%cTie!", "color: gray");
   } else if (userScore > computerScore) {
@@ -71,6 +73,9 @@ function game() {
   } else {
     console.log("%cYou Lose!", "color: red");
   }
+  // Reset the global scores
+  userScore = 0;
+  computerScore = 0;
 }
 
 game();
