@@ -1,12 +1,16 @@
 // Global scores
 let userScore = 0;
 let computerScore = 0;
+let roundCounter = 0;
 
 // Choices
 const ROCK = "Rock";
 const PAPER = "Paper";
 const SCISSORS = "Scissors";
 const CHOICES = [ROCK, PAPER, SCISSORS];
+
+const BUTTON_BG_COLOR = document.querySelector("button").style.backgroundColor;
+const BUTTON_ALT_BG_COLOR = "#ffffff";
 
 // Get computer choice
 function getComputerChoice() {
@@ -34,7 +38,7 @@ function getUserChoice() {
 function playRound(computerChoice, userChoice) {
   if (computerChoice === userChoice) {
     return (
-      "Tie! A pair of " +
+      "<strong>Tie!</strong> A pair of " +
       computerChoice +
       (computerChoice === SCISSORS ? "" : "s")
     );
@@ -45,37 +49,86 @@ function playRound(computerChoice, userChoice) {
       (computerChoice === SCISSORS && userChoice === PAPER)
     ) {
       computerScore++;
-      return "You Lose! " + computerChoice + " beats " + userChoice;
+      return (
+        '<strong style="color: red;">You Lose! </strong>' +
+        computerChoice +
+        " beats " +
+        userChoice
+      );
     } else {
       userScore++;
-      return "You Win! " + userChoice + " beats " + computerChoice;
+      return (
+        '<strong style="color: green;">You Win! </strong>' +
+        userChoice +
+        " beats " +
+        computerChoice
+      );
     }
   }
 }
 
-// Play the game
-function game() {
-  let computerChoice;
-  let userChoice;
-  let roundResult;
-  // Play 5 rounds
-  for (let i = 0; i < 5; i++) {
-    computerChoice = getComputerChoice();
-    userChoice = getUserChoice();
-    roundResult = playRound(computerChoice, userChoice);
-    console.log(roundResult);
-  }
-  // Log final result
-  if (userScore === computerScore) {
-    console.log("%cTie!", "color: gray");
-  } else if (userScore > computerScore) {
-    console.log("%cYou Win!", "color: green");
-  } else {
-    console.log("%cYou Lose!", "color: red");
-  }
-  // Reset the global scores
-  userScore = 0;
-  computerScore = 0;
+// Update scores
+function updateScores() {
+  document.querySelector("#user-score").textContent = userScore;
+  document.querySelector("#computer-score").textContent = computerScore;
+  document.querySelector("#round-counter").textContent = roundCounter;
 }
 
-game();
+// Show result message
+function showResultMessage(messageContent) {
+  const messageElement = document.createElement("div");
+  messageElement.classList.add("round-result-msg");
+  messageElement.innerHTML = messageContent;
+  document.body.insertBefore(
+    messageElement,
+    document.querySelector("#reset-container")
+  );
+  return messageElement;
+}
+
+// UI
+const choicesDiv = document.querySelector("#choices");
+choicesDiv.addEventListener("click", (event) => {
+  if (!document.querySelector(".final-result-msg")) {
+    showResultMessage(playRound(getComputerChoice(), event.target.value));
+    // Update data
+    roundCounter++;
+    updateScores();
+    if (roundCounter === 5) {
+      let finalResultElement;
+      if (userScore > computerScore) {
+        finalResultElement = showResultMessage(
+          '<strong style="color: green;">You Win!</strong>'
+        );
+      } else if (userScore < computerScore) {
+        finalResultElement = showResultMessage(
+          '<strong style="color: red;">You Lose!</strong>'
+        );
+      } else {
+        finalResultElement = showResultMessage("<strong>Tie!</strong>");
+      }
+      // Add class to distinguish between the final message and the others
+      finalResultElement.classList.add("final-result-msg");
+    }
+  }
+});
+document.body.addEventListener("click", (event) => {
+  // Add click effect to all buttons
+  if (event.target.tagName.toLocaleLowerCase() === "button") {
+    const oldBackgroundColor = event.target.style.backgroundColor;
+    event.target.style.backgroundColor = BUTTON_ALT_BG_COLOR;
+    event.target.style.transform = "scale(98%)";
+    setTimeout(() => {
+      event.target.style.backgroundColor = BUTTON_BG_COLOR;
+      event.target.style.transform = "scale(100%)";
+    }, 200);
+    // Reset
+    if (event.target.id === "reset") {
+      (userScore = 0), (computerScore = 0), (roundCounter = 0);
+      updateScores();
+      const roundResultMessages =
+        document.querySelectorAll(".round-result-msg");
+      roundResultMessages.forEach((msg) => msg.parentNode.removeChild(msg));
+    }
+  }
+});
