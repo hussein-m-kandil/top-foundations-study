@@ -12,6 +12,7 @@ html {
 body {
     margin: 0;
     text-align: center;
+    background-color: darkred;
 }
 
 #sketch-pad-container {
@@ -26,5 +27,5 @@ body {
 }
 
 .grid-cell {
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
