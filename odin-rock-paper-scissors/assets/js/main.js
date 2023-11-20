@@ -89,7 +89,7 @@ function showResultMessage(messageContent) {
 // UI
 const choicesDiv = document.querySelector("#choices");
 choicesDiv.addEventListener("click", (event) => {
-  if (!document.querySelector(".final-result-msg")) {
+  if (!document.querySelector("#final-result-msg")) {
     showResultMessage(playRound(getComputerChoice(), event.target.value));
     // Update data
     roundCounter++;
@@ -107,8 +107,8 @@ choicesDiv.addEventListener("click", (event) => {
       } else {
         finalResultElement = showResultMessage("<strong>Tie!</strong>");
       }
-      // Add class to distinguish between the final message and the others
-      finalResultElement.classList.add("final-result-msg");
+      // Add 'id' to distinguish between the final message and the others
+      finalResultElement.id = "final-result-msg";
     }
   }
 });

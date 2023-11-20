@@ -71,11 +71,20 @@ button {
     word-wrap: break-word;
 }
 
-.round-result-msg {
-    text-align: center;
-}
-
 #reset-container {
     margin: 1rem auto;
     padding-bottom: 1rem;
+}
+
+.round-result-msg {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 200;
+    font-style: italic;
+}
+
+#final-result-msg {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1rem auto;
 }
