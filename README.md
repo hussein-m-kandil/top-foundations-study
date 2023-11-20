@@ -7,3 +7,4 @@ A single monorepo for projects that i made while studying the [Foundations Cours
 1. [Odin Recipes](https://hussein-m-kandil.github.io/top-foundations-study/odin-recipes/index.html)
 2. [Odin Landing Page](https://hussein-m-kandil.github.io/top-foundations-study/odin-landing-page/index.html)
 3. [Odin Rock Paper Scissors](https://hussein-m-kandil.github.io/top-foundations-study/odin-rock-paper-scissors/index.html)
+4. [Odin Etch-a-Sketch](https://hussein-m-kandil.github.io/top-foundations-study/odin-etch-a-sketch/index.html)
