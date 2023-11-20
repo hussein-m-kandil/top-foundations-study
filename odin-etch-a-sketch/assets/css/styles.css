@@ -1,0 +1,30 @@
+html {
+    box-sizing: border-box;
+    font-size: 100%;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    text-align: center;
+}
+
+#sketch-pad-container {
+    margin: 1rem auto;
+}
+
+#sketch-pad {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.grid-cell {
+    border: 1px solid black;
+}
