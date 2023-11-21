@@ -3,8 +3,8 @@ const MIN_GRID_CELLS_NUM = 4;
 const MAX_GRID_CELLS_NUM = 128;
 const SKETCH_PAD_WIDTH_NUM = 512;
 const EVENT_TYPES = [
-  "mouseenter",
-  "pointerenter",
+  "mouseover",
+  "pointerover",
   "touchmove",
   "mousedown",
   "mouseup",
@@ -46,6 +46,11 @@ document
     event.target.querySelector("span").textContent = userGridCellsNum;
   });
 
+const sketchPadContainer = document.querySelector("#sketch-pad-container");
+EVENT_TYPES.forEach((eventType) =>
+  sketchPadContainer.addEventListener(eventType, painter)
+);
+
 function painter(event) {
   switch (event.type) {
     // Is pen pressed?
@@ -79,8 +84,8 @@ function painter(event) {
       }
       break;
     // Painting events
-    case "mouseenter":
-    case "pointerenter":
+    case "mouseover":
+    case "pointerover":
     case "touchmove":
       if (penPressed) {
         if (event.type === "touchmove") {
@@ -114,9 +119,6 @@ function drawGrid(numOfSquares = DEFAULT_GRID_CELLS_NUM) {
     gridCell.style.width = gridCellSideLength + "px";
     gridCell.style.height = gridCellSideLength + "px";
     gridCell.style.background = "white";
-    EVENT_TYPES.forEach((eventType) =>
-      gridCell.addEventListener(eventType, painter)
-    );
     sketchPad.appendChild(gridCell);
   }
   sketchPadContainer.appendChild(sketchPad);
