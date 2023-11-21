@@ -2,7 +2,18 @@ const DEFAULT_GRID_CELLS_NUM = 16;
 const MIN_GRID_CELLS_NUM = 4;
 const MAX_GRID_CELLS_NUM = 128;
 const SKETCH_PAD_WIDTH_NUM = 512;
+const EVENT_TYPES = [
+  "mouseenter",
+  "pointerenter",
+  "touchmove",
+  "mousedown",
+  "mouseup",
+  "pointerdown",
+  "pointerup",
+  "dragstart",
+];
 let userGridCellsNum;
+let penPressed = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   drawGrid();
@@ -35,16 +46,56 @@ document
     event.target.querySelector("span").textContent = userGridCellsNum;
   });
 
-let mouseDown = false;
-const sketchPadContainer = document.querySelector("#sketch-pad-container");
-sketchPadContainer.onmousedown = () => (mouseDown = true);
-sketchPadContainer.onmouseup = () => (mouseDown = false);
-sketchPadContainer.addEventListener("mouseover", (event) => {
-  if (mouseDown && event.target.classList.contains("grid-cell")) {
-    event.target.style.backgroundColor = "black";
+function painter(event) {
+  switch (event.type) {
+    // Is pen pressed?
+    case "mousedown":
+      (event) => (penPressed = event.button === 0 ? true : penPressed);
+      break;
+    case "mouseup":
+      (event) => (penPressed = event.button === 0 ? false : penPressed);
+      break;
+    case "pointerdown":
+      if (
+        (event.pointerType === "mouse" && event.button === 0) ||
+        event.pointerType !== "mouse"
+      ) {
+        penPressed = true;
+        // https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent#sect2
+        // https://w3c.github.io/pointerevents/#dfn-implicit-pointer-capture
+        // https://w3c.github.io/pointerevents/#dom-element-haspointercapture
+        // https://developer.mozilla.org/en-US/docs/Web/API/Element/releasePointerCapture
+        if (event.target.hasPointerCapture(event.pointerId)) {
+          event.target.releasePointerCapture(event.pointerId);
+        }
+      }
+      break;
+    case "pointerup":
+      if (
+        (event.pointerType === "mouse" && event.button === 0) ||
+        event.pointerType !== "mouse"
+      ) {
+        penPressed = false;
+      }
+      break;
+    // Painting events
+    case "mouseenter":
+    case "pointerenter":
+    case "touchmove":
+      if (penPressed) {
+        if (event.type === "touchmove") {
+          event.preventDefault();
+        } else {
+          event.target.style.backgroundColor = "black";
+        }
+      }
+      break;
+    // Prevent drags
+    case "dragstart":
+      event.preventDefault();
+      break;
   }
-  event.stopPropagation();
-});
+}
 
 function drawGrid(numOfSquares = DEFAULT_GRID_CELLS_NUM) {
   const sketchPadContainer = document.querySelector("#sketch-pad-container");
@@ -63,6 +114,9 @@ function drawGrid(numOfSquares = DEFAULT_GRID_CELLS_NUM) {
     gridCell.style.width = gridCellSideLength + "px";
     gridCell.style.height = gridCellSideLength + "px";
     gridCell.style.background = "white";
+    EVENT_TYPES.forEach((eventType) =>
+      gridCell.addEventListener(eventType, painter)
+    );
     sketchPad.appendChild(gridCell);
   }
   sketchPadContainer.appendChild(sketchPad);
