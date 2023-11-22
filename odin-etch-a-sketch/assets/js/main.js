@@ -3,6 +3,7 @@ const MIN_GRID_CELLS_NUM = 4;
 const MAX_GRID_CELLS_NUM = 128;
 const SKETCH_PAD_WIDTH_NUM = 512;
 const EVENT_TYPES = [
+  "click",
   "mouseover",
   "pointerover",
   "touchmove",
@@ -84,6 +85,9 @@ function painter(event) {
       }
       break;
     // Painting events
+    case "click":
+      event.target.style.backgroundColor = "black";
+      break;
     case "mouseover":
     case "pointerover":
     case "touchmove":
