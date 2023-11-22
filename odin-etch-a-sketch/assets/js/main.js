@@ -15,12 +15,18 @@ const EVENT_TYPES = [
 ];
 let userGridCellsNum;
 let penPressed = false;
+let eraseMode = false;
+const eraseModeBtn = document.querySelector("#pen-eraser-btn");
 
 document.addEventListener("DOMContentLoaded", () => {
   drawGrid();
   document.querySelector("#grid-cells-num-btn>span").textContent =
     DEFAULT_GRID_CELLS_NUM;
 });
+
+document
+  .querySelector("#clear-btn")
+  .addEventListener("click", () => drawGrid(userGridCellsNum));
 
 document
   .querySelector("#grid-cells-num-btn")
@@ -47,10 +53,28 @@ document
     event.target.querySelector("span").textContent = userGridCellsNum;
   });
 
+eraseModeBtn.addEventListener("click", (event) => {
+  if (eraseMode) {
+    event.target.textContent = "Eraser";
+    eraseMode = false;
+  } else {
+    event.target.textContent = "Pen";
+    eraseMode = true;
+  }
+  if (event.bubbles) event.stopPropagation();
+});
+
 const sketchPadContainer = document.querySelector("#sketch-pad-container");
 EVENT_TYPES.forEach((eventType) =>
   sketchPadContainer.addEventListener(eventType, painter)
 );
+
+function paintOnGridCell(cell) {
+  // Make sure that you are interacting with a valid grid cell
+  if (cell.classList.contains("grid-cell")) {
+    cell.style.backgroundColor = eraseMode ? "white" : "black";
+  }
+}
 
 function painter(event) {
   switch (event.type) {
@@ -86,7 +110,7 @@ function painter(event) {
       break;
     // Painting events
     case "click":
-      event.target.style.backgroundColor = "black";
+      paintOnGridCell(event.target);
       break;
     case "mouseover":
     case "pointerover":
@@ -95,7 +119,7 @@ function painter(event) {
         if (event.type === "touchmove") {
           event.preventDefault();
         } else {
-          event.target.style.backgroundColor = "black";
+          paintOnGridCell(event.target);
         }
       }
       break;
@@ -126,4 +150,8 @@ function drawGrid(numOfSquares = DEFAULT_GRID_CELLS_NUM) {
     sketchPad.appendChild(gridCell);
   }
   sketchPadContainer.appendChild(sketchPad);
+  // Revert back from eraser mode to pen mode
+  if (eraseMode) {
+    eraseModeBtn.click();
+  }
 }
