@@ -40,12 +40,7 @@ window.addEventListener("load", () => {
   dynamicModeBtn.style.color = MID_TONE_GRAY;
 
   document.querySelector("#clear-btn").addEventListener("click", (event) => {
-    const CONFIRM_MSG = "Yes";
-    const clearConfirmed = window.prompt(
-      "Do you want to clear the sketch?",
-      CONFIRM_MSG
-    );
-    if (clearConfirmed && clearConfirmed === CONFIRM_MSG) {
+    if (window.confirm("Do you want to clear the sketch?")) {
       drawGrid(userGridCellsNum);
     }
     if (event.bubbles) event.stopPropagation();
