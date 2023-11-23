@@ -38,10 +38,6 @@ button {
     transition-duration: 100ms;
 }
 
-button:hover {
-    background-color: rgb(72, 72, 72);
-}
-
 #main-container {
     width: 85%;
     margin: 1rem auto;
@@ -99,10 +95,6 @@ button:hover {
         margin: 5%;
         margin-bottom: 0;
         aspect-ratio: 1;
-    }
-
-    &>div:hover {
-        box-shadow: 0px 0px 5px 1px white;
     }
 }
 

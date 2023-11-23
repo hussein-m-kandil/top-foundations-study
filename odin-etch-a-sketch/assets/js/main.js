@@ -3,6 +3,7 @@ const MIN_GRID_CELLS_NUM = 4;
 const MAX_GRID_CELLS_NUM = 128;
 const PURE_WHITE = "#ffffff";
 const MID_TONE_GRAY = "#7f7f7f";
+const DARK_GRAY = "#484848";
 const PURE_BLACK = "#000000";
 const SELECTED_SWATCH_BORDER = "2px dashed blue";
 const EVENT_TYPES = [
@@ -108,6 +109,7 @@ function animateAllButtonsOnClick() {
   const allButtons = document.querySelectorAll("button");
   if (allButtons && allButtons.length > 0) {
     [...allButtons].forEach((btn) => {
+      // Animation effect
       btn.addEventListener("pointerdown", (event) => {
         event.preventDefault();
         btn.style.transform = "scale(0.95)";
@@ -122,6 +124,17 @@ function animateAllButtonsOnClick() {
         event.preventDefault();
         btn.style.transform = "scale(1)";
         if (event.bubbles) event.stopPropagation();
+      });
+      // Hover over effect
+      btn.addEventListener("pointerenter", (event) => {
+        if (event.pointerType === "mouse") {
+          btn.style.backgroundColor = DARK_GRAY;
+        }
+      });
+      btn.addEventListener("pointerout", (event) => {
+        if (event.pointerType === "mouse") {
+          btn.style.backgroundColor = PURE_BLACK;
+        }
       });
     });
   }
@@ -155,15 +168,27 @@ function addColorSwatches() {
     const colorSwatch = document.createElement("div");
     colorSwatch.setAttribute("id", "color-" + (i + 1).toString());
     colorSwatch.style.backgroundColor = currentRGBColor;
+    colorSwatch.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "mouse") {
+        colorSwatch.style.boxShadow = "0px 0px 5px 1px white";
+      }
+    });
+    colorSwatch.addEventListener("pointerout", (event) => {
+      if (event.pointerType === "mouse") {
+        colorSwatch.style.boxShadow = "none";
+      }
+    });
     colorSwatches.appendChild(colorSwatch);
     if (i === 0) firstSwatch = colorSwatch;
   }
   chosenColorSwatch = firstSwatch;
   chosenColorSwatch.style.border = SELECTED_SWATCH_BORDER;
   colorSwatches.addEventListener("click", (event) => {
-    chosenColorSwatch.style.border = "none";
-    chosenColorSwatch = event.target;
-    chosenColorSwatch.style.border = SELECTED_SWATCH_BORDER;
+    if (event.target !== colorSwatches) {
+      chosenColorSwatch.style.border = "none";
+      chosenColorSwatch = event.target;
+      chosenColorSwatch.style.border = SELECTED_SWATCH_BORDER;
+    }
     if (event.bubbles) event.stopPropagation();
   });
 }
