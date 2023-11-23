@@ -1,7 +1,6 @@
 const DEFAULT_GRID_CELLS_NUM = 16;
 const MIN_GRID_CELLS_NUM = 4;
 const MAX_GRID_CELLS_NUM = 128;
-const SKETCH_PAD_WIDTH_NUM = 512;
 const PURE_WHITE = "#ffffff";
 const MID_TONE_GRAY = "#7f7f7f";
 const PURE_BLACK = "#000000";
@@ -30,39 +29,50 @@ window.addEventListener("load", () => {
 
   addColorSwatches();
 
+  animateAllButtonsOnClick();
+
+  window.addEventListener("resize", () => drawGrid(userGridCellsNum));
+
   document.querySelector("#grid-cells-num-btn>span").textContent =
     DEFAULT_GRID_CELLS_NUM;
 
   dynamicModeBtn.style.color = MID_TONE_GRAY;
 
-  document
-    .querySelector("#clear-btn")
-    .addEventListener("click", () => drawGrid(userGridCellsNum));
-
-  document
-    .querySelector("#grid-cells-num-btn")
-    .addEventListener("click", (event) => {
-      do {
-        userGridCellsNum = window.prompt(
-          "Enter a hole number to be used as the number of squares per side (" +
-            MIN_GRID_CELLS_NUM +
-            "-" +
-            MAX_GRID_CELLS_NUM +
-            ")? "
-        );
-        if (userGridCellsNum === null || userGridCellsNum === "") {
-          return;
-        }
-        userGridCellsNum = Number(userGridCellsNum);
-      } while (
-        Number.isNaN(userGridCellsNum) ||
-        !Number.isInteger(userGridCellsNum) ||
-        userGridCellsNum < MIN_GRID_CELLS_NUM ||
-        userGridCellsNum > MAX_GRID_CELLS_NUM
-      );
+  document.querySelector("#clear-btn").addEventListener("click", (event) => {
+    const CONFIRM_MSG = "Yes";
+    const clearConfirmed = window.prompt(
+      "Do you want to clear the sketch?",
+      CONFIRM_MSG
+    );
+    if (clearConfirmed && clearConfirmed === CONFIRM_MSG) {
       drawGrid(userGridCellsNum);
-      event.target.querySelector("span").textContent = userGridCellsNum;
-    });
+    }
+    if (event.bubbles) event.stopPropagation();
+  });
+
+  const gridCellsNumBtn = document.querySelector("#grid-cells-num-btn");
+  gridCellsNumBtn.addEventListener("click", (event) => {
+    do {
+      userGridCellsNum = window.prompt(
+        "Enter a hole number to be used as the number of squares per side (" +
+          MIN_GRID_CELLS_NUM +
+          "-" +
+          MAX_GRID_CELLS_NUM +
+          ")? "
+      );
+      if (userGridCellsNum === null || userGridCellsNum === "") {
+        return;
+      }
+      userGridCellsNum = Number(userGridCellsNum);
+    } while (
+      Number.isNaN(userGridCellsNum) ||
+      !Number.isInteger(userGridCellsNum) ||
+      userGridCellsNum < MIN_GRID_CELLS_NUM ||
+      userGridCellsNum > MAX_GRID_CELLS_NUM
+    );
+    drawGrid(userGridCellsNum);
+    gridCellsNumBtn.querySelector("span").textContent = userGridCellsNum;
+  });
 
   eraseModeBtn.addEventListener("click", (event) => {
     if (eraseMode) {
@@ -80,7 +90,7 @@ window.addEventListener("load", () => {
       event.target.style.color = MID_TONE_GRAY;
       dynamicMode = false;
     } else {
-      event.target.style.color = PURE_BLACK;
+      event.target.style.color = PURE_WHITE;
       dynamicMode = true;
     }
     if (event.bubbles) {
@@ -93,6 +103,29 @@ window.addEventListener("load", () => {
     sketchPadContainer.addEventListener(eventType, painter)
   );
 });
+
+function animateAllButtonsOnClick() {
+  const allButtons = document.querySelectorAll("button");
+  if (allButtons && allButtons.length > 0) {
+    [...allButtons].forEach((btn) => {
+      btn.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        btn.style.transform = "scale(0.95)";
+        if (event.bubbles) event.stopPropagation();
+      });
+      btn.addEventListener("pointerup", (event) => {
+        event.preventDefault();
+        btn.style.transform = "scale(1)";
+        if (event.bubbles) event.stopPropagation();
+      });
+      btn.addEventListener("pointerout", (event) => {
+        event.preventDefault();
+        btn.style.transform = "scale(1)";
+        if (event.bubbles) event.stopPropagation();
+      });
+    });
+  }
+}
 
 function addOrSubtractTenPercentMax(rgbColor, subtract = false) {
   rgbColor = Number(rgbColor);
@@ -116,14 +149,14 @@ function addOrSubtractTenPercentBlack(strRGBColor, subtract = false) {
 function addColorSwatches() {
   const colorSwatches = document.querySelector("#color-swatches");
   let firstSwatch = null;
-  let currentRGBColor = "rgb(255,255,255)";
+  let currentRGBColor = "rgb(0,0,0)";
   for (let i = 0; i < 10; i++) {
-    currentRGBColor = addOrSubtractTenPercentBlack(currentRGBColor);
+    currentRGBColor = addOrSubtractTenPercentBlack(currentRGBColor, true);
     const colorSwatch = document.createElement("div");
     colorSwatch.setAttribute("id", "color-" + (i + 1).toString());
     colorSwatch.style.backgroundColor = currentRGBColor;
     colorSwatches.appendChild(colorSwatch);
-    if (i === 9) firstSwatch = colorSwatch;
+    if (i === 0) firstSwatch = colorSwatch;
   }
   chosenColorSwatch = firstSwatch;
   chosenColorSwatch.style.border = SELECTED_SWATCH_BORDER;
@@ -207,6 +240,7 @@ function painter(event) {
 
 function drawGrid(numOfSquares = DEFAULT_GRID_CELLS_NUM) {
   const sketchPadContainer = document.querySelector("#sketch-pad-container");
+  const sketchPadWidthNum = sketchPadContainer.clientWidth;
   const sketchPadId = "sketch-pad";
   let sketchPad = document.querySelector("#" + sketchPadId);
   if (sketchPad) {
@@ -214,8 +248,8 @@ function drawGrid(numOfSquares = DEFAULT_GRID_CELLS_NUM) {
   }
   sketchPad = document.createElement("div");
   sketchPad.setAttribute("id", sketchPadId);
-  sketchPad.style.width = SKETCH_PAD_WIDTH_NUM + "px";
-  const gridCellSideLength = SKETCH_PAD_WIDTH_NUM / numOfSquares;
+  sketchPad.style.width = sketchPadWidthNum + "px";
+  const gridCellSideLength = sketchPadWidthNum / numOfSquares;
   for (let i = 0; i < numOfSquares * numOfSquares; i++) {
     const gridCell = document.createElement("div");
     gridCell.classList.add("grid-cell");

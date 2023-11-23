@@ -1,6 +1,7 @@
 html {
     box-sizing: border-box;
     font-size: 100%;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 *,
@@ -11,11 +12,54 @@ html {
 
 body {
     margin: 0;
+    margin-bottom: 2rem;
     text-align: center;
     background-color: darkred;
+    text-wrap: wrap;
+    word-wrap: break-word;
+}
+
+h1 {
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: black;
+    width: 100%;
+    margin: 1rem auto;
+}
+
+button {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    border: none;
+    border-radius: 0.1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin: 0.5rem;
+    transition-duration: 100ms;
+}
+
+button:hover {
+    background-color: rgb(72, 72, 72);
+}
+
+#main-container {
+    width: 85%;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#grid-cells-btn-num-container {
+    max-width: max-content;
+    min-width: min-content;
+    margin: 0 auto;
 }
 
 #sketch-pad-container {
+    width: 95%;
+    max-width: 95vh;
+    max-width: 95svh;
     margin: 1rem auto;
 }
 
@@ -27,24 +71,79 @@ body {
 }
 
 #tools-container {
-    width: min-content;
+    flex-grow: 1;
+    width: 100%;
     margin: 1rem auto;
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+
+    &>button {
+        flex-grow: 1;
+    }
 }
 
 #color-swatches {
-    margin: 1rem auto;
-    padding: 0 1rem;
+    flex-grow: 1;
+    width: 100%;
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: end;
 
     &>div {
-        min-width: 1rem;
+        width: 10%;
+        margin: 5%;
+        margin-bottom: 0;
         aspect-ratio: 1;
-        flex-grow: 1;
     }
 
     &>div:hover {
         box-shadow: 0px 0px 5px 1px white;
+    }
+}
+
+@media screen and (min-width: 690px) {
+    #sketch-pad-container {
+        width: 65%;
+        margin: 0;
+        max-width: 65vh;
+        max-width: 65svh;
+    }
+
+    #main-container {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    #color-swatches {
+        align-items: center;
+    }
+
+    #tools-area {
+        max-width: 45vh;
+        max-width: 45svh;
+        flex-grow: 0.5;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    #tools-container {
+        margin: 0;
+        flex-direction: column;
+
+        &>button {
+            width: 90%;
+            margin-left: 0;
+            margin-right: 0;
+            margin-top: 0;
+
+        }
     }
 }
