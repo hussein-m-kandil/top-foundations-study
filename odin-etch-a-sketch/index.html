@@ -16,16 +16,22 @@
 
 <body>
     <h1>Etch-a-Sketch</h1>
-    <button type="button" id="grid-cells-num-btn">
-        Number of squares per side (<span></span>)
-    </button>
-    <div id="sketch-pad-container"></div>
-    <div id="tools-container">
-        <button type="button" id="pen-eraser-btn">Eraser</button>
-        <button type="button" id="clear-btn">Clear</button>
-        <button type="button" id="dynamic-btn">Dynamic</button>
+    <div id="grid-cells-num-btn-container">
+        <button type="button" id="grid-cells-num-btn">
+            Squares per side (<span></span>)
+        </button>
     </div>
-    <div id="color-swatches"></div>
+    <div id="main-container">
+        <div id="sketch-pad-container"></div>
+        <div id="tools-area">
+            <div id="tools-container">
+                <button type="button" id="pen-eraser-btn">Eraser</button>
+                <button type="button" id="clear-btn">Clear</button>
+                <button type="button" id="dynamic-btn">Dynamic</button>
+            </div>
+            <div id="color-swatches"></div>
+        </div>
+    </div>
 </body>
 
 </html>
