@@ -29,6 +29,8 @@ window.addEventListener("load", () => {
 
   addColorSwatches();
 
+  animateAllButtonsOnClick();
+
   window.addEventListener("resize", () => drawGrid(userGridCellsNum));
 
   document.querySelector("#grid-cells-num-btn>span").textContent =
@@ -101,6 +103,29 @@ window.addEventListener("load", () => {
     sketchPadContainer.addEventListener(eventType, painter)
   );
 });
+
+function animateAllButtonsOnClick() {
+  const allButtons = document.querySelectorAll("button");
+  if (allButtons && allButtons.length > 0) {
+    [...allButtons].forEach((btn) => {
+      btn.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        btn.style.transform = "scale(0.95)";
+        if (event.bubbles) event.stopPropagation();
+      });
+      btn.addEventListener("pointerup", (event) => {
+        event.preventDefault();
+        btn.style.transform = "scale(1)";
+        if (event.bubbles) event.stopPropagation();
+      });
+      btn.addEventListener("pointerout", (event) => {
+        event.preventDefault();
+        btn.style.transform = "scale(1)";
+        if (event.bubbles) event.stopPropagation();
+      });
+    });
+  }
+}
 
 function addOrSubtractTenPercentMax(rgbColor, subtract = false) {
   rgbColor = Number(rgbColor);
