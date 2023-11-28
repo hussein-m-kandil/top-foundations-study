@@ -6,12 +6,14 @@ html {
 
 body {
     text-align: center;
-    margin: 0;
+    margin: 0 auto;
     min-height: 100vh;
     min-height: 100svh;
+    width: 90%;
+    max-width: 960px;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
 }
 
@@ -21,7 +23,7 @@ div {
 
 button {
     margin-bottom: 1rem;
-    padding: 0.5rem;
+    padding: 1rem;
     font-size: 1.5rem;
     font-weight: bold;
     background: transparent;
@@ -30,48 +32,32 @@ button {
 
 h1 {
     font-size: 2.5rem;
-    margin: 0;
-    margin-top: 0.5rem;
+    margin: 1rem auto;
+    word-break: break-all;
+    hyphens: auto;
+    hyphenate-character: "-";
 }
 
-header {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 1rem;
-}
-
-#container {
-    flex-grow: 2;
-}
-
-#calculator {
-    margin: 1.5rem auto;
-    padding: 1.5rem;
-    width: 80%;
-    max-width: 960px;
-    border: 1px solid black;
+header,
+main {
+    width: 100%;
 }
 
 #calc-display {
     border: 1px solid black;
     font-size: 2rem;
     text-align: start;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    height: 7rem;
+    padding: 2rem;
     background-color: #efefef;
 }
 
 #calc-body {
+    margin-top: 1rem;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
     align-items: stretch;
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: 2rem;
 }
 
 #operators {
@@ -79,6 +65,11 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.operator {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 #others {
@@ -93,15 +84,19 @@ header {
     flex: 0 1 30%;
 }
 
-@media screen and (min-width: 720px) {
+@media (orientation: landscape) {
 
     #operators {
+        flex-basis: 50%;
         flex-direction: row;
         flex-wrap: wrap;
+        justify-content: flex-end;
+        justify-content: end;
+        gap: 1rem;
     }
 
     .operator {
-        flex-basis: 45%;
+        flex-basis: 35%;
     }
 
     #others>* {
