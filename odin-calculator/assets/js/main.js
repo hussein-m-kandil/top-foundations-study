@@ -1,3 +1,8 @@
+const BLACK = "#000000";
+const MID_TONE_GRAY = "#7F7F7F";
+const LIGHT_GRAY = "#EFEFEF";
+const WHITE = "#FFFFFF";
+
 const calculator = {
   "+": (x, y) => x + y,
   "-": (x, y) => x - y,
@@ -26,3 +31,33 @@ console.log("5 * 7 = ", calculator.calculate("5 * 7"));
 console.log("-6 / 3 = ", calculator.calculate("-6 / 3"));
 console.log("3 / 5 = ", calculator.calculate("3 / 5"));
 console.log("3 / 7 = ", calculator.calculate("3 / 7")); */
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Button interactivity effects
+  document.querySelectorAll("button").forEach((btn) => {
+    const currentBgColor = btn.style.backgroundColor;
+    btn.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "mouse") {
+        btn.style.backgroundColor = LIGHT_GRAY;
+        if (event.bubbles) event.stopPropagation();
+      }
+    });
+    btn.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      btn.style.backgroundColor = LIGHT_GRAY;
+      btn.style.transform = "scale(90%)";
+      if (event.bubbles) event.stopPropagation();
+    });
+    btn.addEventListener("pointerup", (event) => {
+      event.preventDefault();
+      btn.style.transform = "scale(100%)";
+      if (event.bubbles) event.stopPropagation();
+    });
+    btn.addEventListener("pointerleave", (event) => {
+      event.preventDefault();
+      btn.style.backgroundColor = currentBgColor;
+      btn.style.transform = "scale(100%)";
+      if (event.bubbles) event.stopPropagation();
+    });
+  });
+});

@@ -28,6 +28,7 @@ button {
     font-weight: bold;
     background: transparent;
     border: 1px solid black;
+    transition: 50ms;
 }
 
 h1 {
