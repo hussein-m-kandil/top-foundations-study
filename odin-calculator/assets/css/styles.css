@@ -4,104 +4,73 @@ html {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
 body {
     text-align: center;
     margin: 0 auto;
-    min-height: 100vh;
-    min-height: 100svh;
-    width: 90%;
-    max-width: 960px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 div {
     margin: 0 auto;
-}
-
-button {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    background: transparent;
-    border: 1px solid black;
-    transition: 50ms;
-}
-
-h1 {
-    font-size: 2.5rem;
-    margin: 1rem auto;
-    word-break: break-all;
-    hyphens: auto;
-    hyphenate-character: "-";
-}
-
-header,
-main {
     width: 100%;
 }
 
+button {
+    font-size: 2rem;
+    font-weight: bold;
+    background: transparent;
+    border: 1px solid lightgrey;
+    transition: 50ms;
+}
+
+#calculator {
+    min-height: 100vh;
+    min-height: 100svh;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
 #calc-display {
-    border: 1px solid black;
+    flex-grow: 1;
+    min-height: 25vh;
+    min-height: 25svh;
     font-size: 2rem;
     text-align: start;
-    padding: 2rem;
+    padding: 1rem;
     background-color: #efefef;
 }
 
 #calc-body {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    align-items: stretch;
-    gap: 2rem;
-}
-
-#operators {
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.operator {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-}
-
-#others {
-    flex-grow: 7;
-    display: flex;
+    justify-content: center;
+    align-items: stretch;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.25rem;
 }
 
-#others>* {
-    flex: 0 1 30%;
+#calc-body>* {
+    flex-basis: 25%;
 }
 
-@media (orientation: landscape) {
+#calc-body>#equal {
+    flex-grow: 1;
+}
 
-    #operators {
-        flex-basis: 50%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        justify-content: end;
-        gap: 1rem;
+@media (orientation: portrait) and (min-width: 480px) {
+
+    button,
+    #calc-display {
+        font-size: 3rem;
     }
 
-    .operator {
-        flex-basis: 35%;
+    #calculator {
+        max-width: 1920px;
     }
-
-    #others>* {
-        flex: 0 1 20%;
-    }
-
 }
