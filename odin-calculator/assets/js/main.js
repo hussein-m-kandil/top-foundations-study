@@ -3,23 +3,18 @@ const MID_TONE_GRAY = "#7F7F7F";
 const LIGHT_GRAY = "#EFEFEF";
 const WHITE = "#FFFFFF";
 
+let firstOperand = "",
+  secondOperand = "",
+  operator = "";
+operatorEntered = false;
+const calculator = new Calculator();
+
 // Get calculator's display
 const calcDisplay = document.querySelector("#calc-display");
 
 // Get calculator's buttons
 document.querySelectorAll("button").forEach((btn) => {
-  switch (btn.textContent) {
-    // Add values to buttons for later user
-    case "+":
-    case "-":
-    case "*":
-    case "/":
-      btn.value = " " + btn.textContent + " ";
-      break;
-    default:
-      btn.value = btn.textContent;
-      break;
-  }
+  btn.value = btn.textContent; // Add value to each button
   addBtnInteractivityEffects(btn);
   btn.addEventListener("click", (event) => {
     switch (event.target.value) {
@@ -34,30 +29,72 @@ document.querySelectorAll("button").forEach((btn) => {
       case "9":
       case "0":
       case ".":
-      case " + ":
-      case " - ":
-      case " * ":
-      case " / ":
-        if (calcDisplay.textContent.length === 0) {
+        if (calcDisplay.textContent.length === 0 || operatorEntered) {
           calcDisplay.textContent = event.target.value;
+          operatorEntered = false;
         } else {
           calcDisplay.textContent += event.target.value;
         }
+        if (operator) {
+          secondOperand += event.target.value;
+        } else {
+          firstOperand += event.target.value;
+        }
+        break;
+      case "+":
+      case "-":
+      case "*":
+      case "/":
+        if (!operator) {
+          operator = event.target.value;
+        } else {
+          firstOperand = calculator.calculate(
+            `${firstOperand} ${operator} ${secondOperand}`
+          );
+          calcDisplay.textContent = firstOperand;
+          operator = event.target.value;
+          secondOperand = "";
+        }
+        operatorEntered = true;
         break;
       case "CE":
-        if (calcDisplay.textContent.length > 0) {
+        if (operatorEntered) {
+          operatorEntered = false;
+          operator = "";
+        } else if (calcDisplay.textContent.length > 0) {
           calcDisplay.textContent = calcDisplay.textContent.trimEnd();
           calcDisplay.textContent = calcDisplay.textContent.slice(
             0,
             calcDisplay.textContent.length - 1
           );
+          if (secondOperand) {
+            secondOperand = calcDisplay.textContent;
+          } else {
+            firstOperand = calcDisplay.textContent;
+          }
         }
         break;
       case "AC":
-        calcDisplay.textContent = ""; // TODO: free the state of the app
+        calcDisplay.textContent = "";
+        firstOperand = "";
+        secondOperand = "";
+        operator = "";
+        operatorEntered = false;
         break;
       case "=":
-      // Calculate
+        if (!secondOperand) {
+          operator = "";
+          calcDisplay.textContent = firstOperand ? firstOperand : "";
+        } else {
+          firstOperand = calculator.calculate(
+            `${firstOperand} ${operator} ${secondOperand}`
+          );
+          calcDisplay.textContent = firstOperand;
+          operator = "";
+          secondOperand = "";
+        }
+        operatorEntered = false;
+        break;
     }
     if (event.bubbles) event.stopPropagation();
   });
