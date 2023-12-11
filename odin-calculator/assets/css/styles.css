@@ -38,13 +38,14 @@ button {
 }
 
 #calc-display {
-    flex-grow: 1;
     min-height: 25vh;
     min-height: 25svh;
     font-size: 2rem;
     text-align: start;
     padding: 1rem;
     background-color: #efefef;
+    word-wrap: break-word;
+    overflow: auto;
 }
 
 #calc-body {
