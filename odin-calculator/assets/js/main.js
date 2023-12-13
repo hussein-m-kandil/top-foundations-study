@@ -55,6 +55,45 @@ document.querySelectorAll("button").forEach((btn) => {
         firstSignEntered = false;
         secondSignEntered = false;
         break;
+      case "+/-":
+        if (operator) {
+          if (
+            secondOperand &&
+            (secondOperandSign === "" || secondOperandSign === "+")
+          ) {
+            secondOperandSign = "-";
+            if (calcDisplay.textContent !== "0") {
+              calcDisplay.textContent = "-" + calcDisplay.textContent;
+            }
+          } else {
+            secondOperandSign = "";
+            if (
+              calcDisplay.textContent.length > 0 &&
+              calcDisplay.textContent.charAt(0) === "-"
+            ) {
+              calcDisplay.textContent = calcDisplay.textContent.slice(1);
+            }
+          }
+        } else {
+          if (
+            firstOperand &&
+            (firstOperandSign === "" || firstOperandSign === "+")
+          ) {
+            firstOperandSign = "-";
+            if (calcDisplay.textContent !== "0") {
+              calcDisplay.textContent = "-" + calcDisplay.textContent;
+            }
+          } else {
+            firstOperandSign = "";
+            if (
+              calcDisplay.textContent.length > 0 &&
+              calcDisplay.textContent.charAt(0) === "-"
+            ) {
+              calcDisplay.textContent = calcDisplay.textContent.slice(1);
+            }
+          }
+        }
+        break;
       case "+":
       case "-":
       case "*":
@@ -159,7 +198,10 @@ document.querySelectorAll("button").forEach((btn) => {
           }
           operator = "";
           secondOperand = "";
-          firstOperandSign = "";
+          if (firstOperand && firstOperand.charAt(0) === "-") {
+            firstOperandSign = "-";
+            firstOperand = firstOperand.slice(1);
+          }
           secondOperandSign = "";
         }
         operatorEntered = false;
