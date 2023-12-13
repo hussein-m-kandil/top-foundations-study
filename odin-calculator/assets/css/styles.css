@@ -21,7 +21,7 @@ div {
 }
 
 button {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     background: transparent;
     border: 1px solid lightgrey;
@@ -40,7 +40,8 @@ button {
 #calc-display {
     min-height: 25vh;
     min-height: 25svh;
-    font-size: 2rem;
+    font-size: 3rem;
+    font-weight: bold;
     text-align: start;
     padding: 1rem;
     background-color: #efefef;
@@ -66,12 +67,8 @@ button {
 
 @media (orientation: portrait) and (min-width: 480px) {
 
-    button,
-    #calc-display {
-        font-size: 3rem;
-    }
-
     #calculator {
         max-width: 1920px;
     }
+
 }
