@@ -4,9 +4,14 @@ const LIGHT_GRAY = "#EFEFEF";
 const WHITE = "#FFFFFF";
 
 let firstOperand = "",
+  firstOperandSign = "",
   secondOperand = "",
-  operator = "";
-operatorEntered = false;
+  secondOperandSign = "",
+  operator = "",
+  operatorEntered = false,
+  firstSignEntered = false,
+  secondSignEntered = false,
+  calcError = false;
 const calculator = new Calculator();
 
 // Get calculator's display
@@ -29,39 +34,84 @@ document.querySelectorAll("button").forEach((btn) => {
       case "9":
       case "0":
       case ".":
-        if (calcDisplay.textContent.length === 0 || operatorEntered) {
-          calcDisplay.textContent = event.target.value;
-          operatorEntered = false;
-        } else {
-          calcDisplay.textContent += event.target.value;
+        if (
+          event.target.value !== "." ||
+          (operator && !secondOperand.includes(".")) ||
+          !firstOperand.includes(".")
+        ) {
+          if (operatorEntered || calcError || calcDisplay.textContent === "0") {
+            calcError = false;
+            calcDisplay.textContent = event.target.value;
+          } else {
+            calcDisplay.textContent += event.target.value;
+          }
+          if (operator) {
+            secondOperand += event.target.value;
+          } else {
+            firstOperand += event.target.value;
+          }
         }
-        if (operator) {
-          secondOperand += event.target.value;
-        } else {
-          firstOperand += event.target.value;
-        }
+        operatorEntered = false;
+        firstSignEntered = false;
+        secondSignEntered = false;
         break;
       case "+":
       case "-":
       case "*":
       case "/":
-        if (!operator) {
-          operator = event.target.value;
+        if (!firstOperand) {
+          if (event.target.value === "+" || event.target.value === "-") {
+            firstOperandSign = event.target.value;
+            firstSignEntered = true;
+            if (firstOperandSign === "-") {
+              calcDisplay.textContent = "-";
+            }
+          }
+        } else if (firstOperand && operator) {
+          if (event.target.value === "+" || event.target.value === "-") {
+            secondOperandSign = event.target.value;
+            secondSignEntered = true;
+            if (secondOperandSign === "-") {
+              calcDisplay.textContent = "-";
+            }
+            operatorEntered = false;
+          }
         } else {
-          firstOperand = calculator.calculate(
-            `${firstOperand} ${operator} ${secondOperand}`
-          );
-          calcDisplay.textContent = firstOperand;
-          operator = event.target.value;
-          secondOperand = "";
+          if (firstOperand && !operator) {
+            operator = event.target.value;
+          } else if (firstOperand && secondOperand) {
+            firstOperand = calculator.calculate(
+              `${firstOperandSign + firstOperand} ${operator} ${
+                secondOperandSign + secondOperand
+              }`
+            );
+            calcDisplay.textContent = firstOperand;
+            operator = event.target.value;
+            secondOperand = "";
+            firstOperandSign = "";
+            secondOperandSign = "";
+          }
+          operatorEntered = true;
         }
-        operatorEntered = true;
         break;
       case "CE":
         if (operatorEntered) {
           operatorEntered = false;
           operator = "";
-        } else if (calcDisplay.textContent.length > 0) {
+        } else if (firstSignEntered) {
+          firstSignEntered = false;
+          firstOperandSign = "";
+        } else if (secondSignEntered) {
+          secondSignEntered = false;
+          secondOperandSign = "";
+        } else if (calcDisplay.textContent.length === 1) {
+          calcDisplay.textContent = "0";
+          if (secondOperand) {
+            secondOperand = "";
+          } else {
+            firstOperand = "";
+          }
+        } else if (calcDisplay.textContent.length > 1) {
           calcDisplay.textContent = calcDisplay.textContent.trimEnd();
           calcDisplay.textContent = calcDisplay.textContent.slice(
             0,
@@ -75,25 +125,46 @@ document.querySelectorAll("button").forEach((btn) => {
         }
         break;
       case "AC":
-        calcDisplay.textContent = "";
+        calcDisplay.textContent = "0";
         firstOperand = "";
+        firstOperandSign = "";
         secondOperand = "";
+        secondOperandSign = "";
         operator = "";
         operatorEntered = false;
+        firstSignEntered = false;
+        secondSignEntered = false;
         break;
       case "=":
         if (!secondOperand) {
           operator = "";
-          calcDisplay.textContent = firstOperand ? firstOperand : "";
+          calcDisplay.textContent = firstOperand ? firstOperand : "0";
         } else {
-          firstOperand = calculator.calculate(
-            `${firstOperand} ${operator} ${secondOperand}`
-          );
-          calcDisplay.textContent = firstOperand;
+          if (secondOperand === "0") {
+            firstOperand = "";
+            calcDisplay.textContent = "Divide by Zero is undefined!";
+            calcError = true;
+          } else {
+            firstOperand = calculator.calculate(
+              `${firstOperandSign + firstOperand} ${operator} ${
+                secondOperandSign + secondOperand
+              }`
+            );
+            if (
+              firstOperand !== null &&
+              Number.isFinite(Number(firstOperand))
+            ) {
+              calcDisplay.textContent = firstOperand;
+            }
+          }
           operator = "";
           secondOperand = "";
+          firstOperandSign = "";
+          secondOperandSign = "";
         }
         operatorEntered = false;
+        firstSignEntered = false;
+        secondSignEntered = false;
         break;
     }
     if (event.bubbles) event.stopPropagation();
@@ -145,7 +216,7 @@ function Calculator() {
       if (result.toString().includes(".")) {
         return result.toFixed(7).toString().replace(/0+$/, "");
       }
-      return result;
+      return result.toString();
     }
   };
 }
