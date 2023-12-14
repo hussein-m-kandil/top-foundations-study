@@ -213,6 +213,29 @@ document.querySelectorAll("button").forEach((btn) => {
   });
 });
 
+document.addEventListener("keydown", (event) => {
+  const calcBtn = document.querySelector(`button[value="${event.key}"]`);
+  if (calcBtn) {
+    calcBtn.click();
+    event.preventDefault();
+  } else {
+    switch (event.key) {
+      case "Enter":
+        event.preventDefault();
+        document.querySelector("#equal")?.click();
+        break;
+      case "Backspace":
+        event.preventDefault();
+        document.querySelector("#clear-entry")?.click();
+        break;
+      case "Delete":
+        event.preventDefault();
+        document.querySelector("#all-clear")?.click();
+        break;
+    }
+  }
+});
+
 function addBtnInteractivityEffects(btn) {
   const currentBgColor = btn.style.backgroundColor;
   btn.addEventListener("pointerenter", (event) => {
