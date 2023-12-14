@@ -98,39 +98,40 @@ document.querySelectorAll("button").forEach((btn) => {
       case "-":
       case "*":
       case "/":
-        if (!firstOperand) {
-          if (event.target.value === "+" || event.target.value === "-") {
-            firstOperandSign = event.target.value;
-            firstSignEntered = true;
-            if (firstOperandSign === "-") {
-              calcDisplay.textContent = "-";
-            }
-          }
-        } else if (firstOperand && operator) {
-          if (event.target.value === "+" || event.target.value === "-") {
-            secondOperandSign = event.target.value;
-            secondSignEntered = true;
-            if (secondOperandSign === "-") {
-              calcDisplay.textContent = "-";
-            }
-            operatorEntered = false;
-          }
-        } else {
-          if (firstOperand && !operator) {
-            operator = event.target.value;
-          } else if (firstOperand && secondOperand) {
-            firstOperand = calculator.calculate(
-              `${firstOperandSign + firstOperand} ${operator} ${
-                secondOperandSign + secondOperand
-              }`
-            );
-            calcDisplay.textContent = firstOperand;
-            operator = event.target.value;
-            secondOperand = "";
-            firstOperandSign = "";
-            secondOperandSign = "";
-          }
+        if (firstOperand && !operator) {
+          operator = event.target.value;
           operatorEntered = true;
+        } else if (firstOperand && secondOperand) {
+          firstOperand = calculator.calculate(
+            `${firstOperandSign + firstOperand} ${operator} ${
+              secondOperandSign + secondOperand
+            }`
+          );
+          calcDisplay.textContent = firstOperand;
+          operator = event.target.value;
+          secondOperand = "";
+          firstOperandSign = "";
+          secondOperandSign = "";
+          operatorEntered = true;
+        } else {
+          if (!firstOperand) {
+            if (event.target.value === "+" || event.target.value === "-") {
+              firstOperandSign = event.target.value;
+              firstSignEntered = true;
+              if (firstOperandSign === "-") {
+                calcDisplay.textContent = "-";
+              }
+            }
+          } else if (firstOperand && operator) {
+            if (event.target.value === "+" || event.target.value === "-") {
+              secondOperandSign = event.target.value;
+              secondSignEntered = true;
+              if (secondOperandSign === "-") {
+                calcDisplay.textContent = "-";
+              }
+              operatorEntered = false;
+            }
+          }
         }
         break;
       case "CE":
